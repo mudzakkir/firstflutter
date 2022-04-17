@@ -1,33 +1,35 @@
-//Part 7 
-
+//Part 8 Erico Darmawan
+//
 import 'package:flutter/material.dart';
 
-void main() => runApp(AnonymousMethod());
+void main() => runApp(TextStypeApp());
 
-class AnonymousMethod extends StatefulWidget {
-  const AnonymousMethod({Key? key}) : super(key: key);
+class TextStypeApp extends StatefulWidget {
+  const TextStypeApp({Key? key}) : super(key: key);
 
   @override
-  State<AnonymousMethod> createState() => _AnonymousMethodState();
+  State<TextStypeApp> createState() => _TextStypeAppState();
 }
 
-class _AnonymousMethodState extends State<AnonymousMethod> {
-  String message = "Text mToha";
+class _TextStypeAppState extends State<TextStypeApp> {
+  String message = "Sample Text inih";
   int iCounter = 0;
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
         home: Scaffold(
             appBar: AppBar(
-              title: Text("Anonymous Method"),
+              title: Text("Anonymous Method",
+                  style: TextStyle(fontFamily: "Hujan")),
             ),
             body: Center(
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                  Text(message),
+                  Text(message, style: TextStyle(fontFamily: "GiveAway")),
                   RaisedButton(
-                      child: Text("Tekan tombol ini"),
+                      child: Text("Tekan tombol ini",
+                          style: TextStyle(fontFamily: "Techovier")),
                       //Sample Anonymous Method
                       onPressed: () {
                         setState(() {

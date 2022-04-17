@@ -3,6 +3,16 @@ import 'package:flutter/material.dart';
 // flutter run --no-sound-null-safety
 void main() {
   runApp(MyApp());
+
+//TODO : Specify what dart file to run first time
+//   runApp(new MaterialApp(
+//   debugShowCheckedModeBanner: false,
+//   theme: //theme
+//   title: "Title",
+//   home: new Login(), //Here you can specify the screen the app starts on.
+//   routes: <String, WidgetBuilder>{
+//   },
+// ));
 }
 
 class MyApp extends StatelessWidget {
