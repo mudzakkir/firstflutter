@@ -28,8 +28,8 @@ class DrawerWidget extends StatelessWidget {
               onTap: () => eventUploadSpreading(context)),
           _drawerItem(
               icon: Icons.group,
-              text: 'Shared with me',
-              onTap: () => print('Tap Shared menu')),
+              text: 'Test container',
+              onTap: () => eventTestContainer(context)),
           _drawerItem(
               icon: Icons.access_time,
               text: 'Recent',
@@ -116,48 +116,70 @@ class DrawerWidget extends StatelessWidget {
   }
 
   Future<VisitSpreading> uploadImage(filepath) async {
-    final bytes = File(filepath).readAsBytesSync();
-    ImageConvert.Image? imageSource =
-        ImageConvert.decodeImage(new File(filepath).readAsBytesSync());
-    ImageConvert.Image thumbnail =
-        ImageConvert.copyResize(imageSource!, width: 120);
-    // Save the thumbnail as a PNG.
     String path = join("/storage/emulated/0/", "MToha-thumbnail.jpg");
 
-    new File(path)..writeAsBytesSync(ImageConvert.encodeJpg(thumbnail));
-    final bytesResult = File(path).readAsBytesSync();
+    if (filepath == null || filepath.length == 0) filepath = path;
+
+    final bytes = File(filepath).readAsBytesSync();
+    var bytesResult = bytes;
+
+    if (bytes.length > 500000) {
+      ImageConvert.Image? imageSource =
+          ImageConvert.decodeImage(new File(filepath).readAsBytesSync());
+      ImageConvert.Image thumbnail =
+          ImageConvert.copyResize(imageSource!, width: 120);
+      // Save the thumbnail as a PNG.
+
+      new File(path)..writeAsBytesSync(ImageConvert.encodeJpg(thumbnail));
+      bytesResult = File(path).readAsBytesSync();
+    } else {
+      File(filepath).copy(path);
+    }
 
     String fileBase64 = base64Encode(bytesResult);
     VisitSpreading oResult = await VisitSpreading.connectToApi(fileBase64);
     return oResult;
   }
-}
 
-Widget _previewImage() {
-  if (DrawerWidget._imageFile != null) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Image.file(File(DrawerWidget._imageFile.path)),
-          SizedBox(
-            height: 20,
+  eventTestContainer(BuildContext context) {
+    var oWidget = Container(
+        color: Colors.red,
+        alignment: Alignment.center,
+        child: FlatButton(
+          child: Text(
+            'PUSH',
+            style: TextStyle(fontSize: 32.0, color: Colors.white),
           ),
-          RaisedButton(
-            onPressed: () async {
-              String fileBase64 = "";
-              await VisitSpreading.connectToApi(fileBase64);
-            },
-            child: const Text('Upload'),
-          )
-        ],
-      ),
-    );
-  } else {
-    return const Text(
-      'You have not yet picked an image.',
-      textAlign: TextAlign.center,
-    );
+          onPressed: () {},
+        ));
+    DashboardUI.SetMainUI(oWidget);
+  }
+
+  Widget _previewImage() {
+    if (DrawerWidget._imageFile != null) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Image.file(File(DrawerWidget._imageFile.path)),
+            SizedBox(
+              height: 20,
+            ),
+            RaisedButton(
+              onPressed: () async {
+                await uploadImage("");
+              },
+              child: const Text('Upload'),
+            )
+          ],
+        ),
+      );
+    } else {
+      return const Text(
+        'You have not yet picked an image.',
+        textAlign: TextAlign.center,
+      );
+    }
   }
 }
 

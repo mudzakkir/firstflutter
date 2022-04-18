@@ -5,21 +5,23 @@ import 'CommonConstant.dart';
 import 'DrawerWidget.dart';
 
 class DashboardUI extends StatefulWidget {
-  static SingleChildScrollView _MainUI = new SingleChildScrollView();
+  static Widget _MainUI = new SingleChildScrollView(
+    child: Text("Hello " + CommonConstant.GLOBAL_USER.name),
+  );
+  static _DashboardUIState oState = new _DashboardUIState();
 
   const DashboardUI({Key? key}) : super(key: key);
 
   @override
-  State<DashboardUI> createState() => _DashboardUIState();
+  State<DashboardUI> createState() => oState;
 
-  static void SetMainUI(SingleChildScrollView oUI) {
+  static void SetMainUI(Widget oUI) {
     _MainUI = oUI;
+    oState._updateUI(oUI);
   }
 }
 
 class _DashboardUIState extends State<DashboardUI> {
-  late final ValueListenable<SingleChildScrollView> _ParentScrollable;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,13 +30,16 @@ class _DashboardUIState extends State<DashboardUI> {
       ),
       drawer: DrawerWidget(),
       endDrawer: DrawerWidget(),
-      body: Center(child: DashboardUI._MainUI),
+      body: Center(
+          child: SingleChildScrollView(child: _updateUI(DashboardUI._MainUI))),
     );
   }
 
-  void _updateUI(SingleChildScrollView oNewUI) {
+  Widget _updateUI(Widget oNewUI) {
     setState(() {
       DashboardUI._MainUI = oNewUI;
     });
+
+    return DashboardUI._MainUI;
   }
 }

@@ -67,13 +67,14 @@ class DBProvider {
 
   insertLogError(LogError data) async {
     final db = await database;
-    //get the biggest id in the table
-    var table =
-        await db?.rawQuery("SELECT IFNULL(MAX(id)+1, 1) as id FROM LogError");
-    int? id = int.parse(table!.first['id'].toString());
-    //insert to the table using the new id
     var raw = -99;
+    int? id = -99;
     try {
+      //get the biggest id in the table
+      var table =
+          await db?.rawQuery("SELECT IFNULL(MAX(id)+1, 1) as id FROM LogError");
+      id = int.parse(table!.first['id'].toString());
+      //insert to the table using the new id
       raw = (await db?.rawInsert(
           "INSERT Into LogError (id,source,Description,DateOccured, Query)"
           " VALUES (?,?,?,?, ?)",
